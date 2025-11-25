@@ -9,6 +9,7 @@ import {
 } from "@/ui/components/ui/navigation-menu";
 import { Button } from "@/ui/components/ui/button";
 import { useAuthStore } from "@/modules/auth/infrastructure/auth.store"; // ejemplo de store
+import { ModeToggle } from "./mode-toggle";
 
 export const Navigation = () => {
   const user = useAuthStore((state) => state.user); // si user existe, está logeado
@@ -16,7 +17,7 @@ export const Navigation = () => {
   console.log(user);
 
   return (
-    <nav className="border-b px-6 py-3 flex items-center justify-between bg-white">
+    <nav className="border-b px-6 py-3 flex items-center justify-between">
       {/* logo */}
       <Link to="/" className="text-xl font-bold">
         GanadoAPP
@@ -30,7 +31,10 @@ export const Navigation = () => {
             <>
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link to="/login" className="px-3 py-2 hover:text-primary">
+                  <Link
+                    to="/auth/login"
+                    className="px-3 py-2 hover:text-primary"
+                  >
                     Iniciar sesión
                   </Link>
                 </NavigationMenuLink>
@@ -38,7 +42,10 @@ export const Navigation = () => {
 
               <NavigationMenuItem>
                 <NavigationMenuLink asChild>
-                  <Link to="/register" className="px-3 py-2 hover:text-primary">
+                  <Link
+                    to="/auth/register"
+                    className="px-3 py-2 hover:text-primary"
+                  >
                     Registrarse
                   </Link>
                 </NavigationMenuLink>
@@ -96,6 +103,7 @@ export const Navigation = () => {
               </NavigationMenuItem>
             </>
           )}
+          <ModeToggle />
         </NavigationMenuList>
       </NavigationMenu>
     </nav>

@@ -1,6 +1,8 @@
 import { createHashRouter } from "react-router";
 import { Index } from "./pages/Index";
 import { Layout } from "./pages/Layout";
+import { authRoutes } from "./pages/auth/routes";
+import { appRoutes } from "./pages/app/routes";
 
 export const router = createHashRouter([
   {
@@ -11,6 +13,8 @@ export const router = createHashRouter([
         index: true,
         Component: Index,
       },
+      authRoutes,
+      appRoutes,
     ],
   },
 ]);

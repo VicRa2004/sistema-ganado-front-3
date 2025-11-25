@@ -44,6 +44,7 @@ export class AxiosAuthRpository implements AuthRepository {
 
   saveSession(token: string, user: User): void {
     useAuthStore.getState().setToken(token);
+    console.log(user);
     useAuthStore.getState().setUser(user);
   }
 }
