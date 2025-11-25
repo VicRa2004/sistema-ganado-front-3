@@ -1,7 +1,7 @@
 import { Pagination } from "@/core/shared/domain/Pagination";
 import { Ground, GroundCreate, GroundUpdate } from "../../domain/Ground";
 import { GroundFilters, GroundRepository } from "../../domain/GroundRepository";
-import { axiosClient } from "@/core/http/axiosClient";
+import { axiosClient } from "@/core/config/axiosClient";
 import { ResAPI } from "@/core/shared/domain/ResAPI";
 import { AxiosError } from "axios";
 
