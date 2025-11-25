@@ -3,9 +3,6 @@ import { useAuthStore } from "../../modules/auth/infrastructure/auth.store";
 
 export const axiosClient = axios.create({
   baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 // 🔹 Request Interceptor — agrega el token

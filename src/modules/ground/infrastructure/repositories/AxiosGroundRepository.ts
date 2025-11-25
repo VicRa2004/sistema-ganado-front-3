@@ -43,9 +43,20 @@ export class AxiosGroundRepository implements GroundRepository {
   }
 
   async create(ground: GroundCreate): Promise<Ground> {
+    const form = new FormData();
+    form.append("name", ground.name);
+    if (ground.image) {
+      console.log(ground.image);
+      form.append("image", ground.image);
+    }
+    form.append("width", JSON.stringify(ground.width));
+    form.append("length", JSON.stringify(ground.length));
+    form.append("address", ground.address);
+    form.append("notes", ground.notes);
+
     const {
       data: { data },
-    } = await axiosClient.post<ResAPI<Ground>>("/ground", ground);
+    } = await axiosClient.post<ResAPI<Ground>>("/ground", form);
 
     return {
       ...data,

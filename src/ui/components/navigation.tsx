@@ -60,22 +60,22 @@ export const Navigation = () => {
                 <NavigationMenuTrigger>Catálogos</NavigationMenuTrigger>
                 <NavigationMenuContent className="p-3 grid gap-2">
                   <NavigationMenuLink asChild>
-                    <Link to="/terrenos" className="hover:text-primary">
+                    <Link to="/app/ground" className="hover:text-primary">
                       Terrenos
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link to="/fierros" className="hover:text-primary">
+                    <Link to="/app/iron" className="hover:text-primary">
                       Fierros
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link to="/ganado" className="hover:text-primary">
+                    <Link to="/app/cattle" className="hover:text-primary">
                       Ganado
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
-                    <Link to="/crias" className="hover:text-primary">
+                    <Link to="/app/crias" className="hover:text-primary">
                       Registro de crías
                     </Link>
                   </NavigationMenuLink>
