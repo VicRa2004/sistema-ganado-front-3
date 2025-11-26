@@ -29,6 +29,8 @@ export class AxiosIronRepository implements IronRepository {
         data: { data },
       } = await axiosClient.get<ResAPI<Iron>>(`/iron/${id}`);
 
+      console.log(data);
+
       return {
         ...data,
         createdAt: new Date(data.createdAt),

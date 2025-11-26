@@ -3,6 +3,9 @@ import { IndexApp } from "./IndexApp";
 import { IndexGround } from "./grounds/IndexGround";
 import { CreateGround } from "./grounds/CreateGround";
 import { UpdateGround } from "./grounds/UpdateGround";
+import { IndexIron } from "./irons/IndexIron";
+import { CreateIron } from "./irons/CreateIron";
+import { UpdateIron } from "./irons/UpdateIron";
 
 export const appRoutes: RouteObject = {
   path: "app",
@@ -22,6 +25,18 @@ export const appRoutes: RouteObject = {
     {
       path: "ground/update/:id",
       Component: UpdateGround,
+    },
+    {
+      path: "iron",
+      Component: IndexIron,
+    },
+    {
+      path: "iron/create",
+      Component: CreateIron,
+    },
+    {
+      path: "iron/update/:id",
+      Component: UpdateIron,
     },
   ],
 };
