@@ -3,7 +3,7 @@ import {
   useUpdateGround,
   useGetGround,
 } from "@/modules/ground/infrastructure/hooks/use-ground";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +35,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const UpdateGround = () => {
+  const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const id = Number(params.id);
 
@@ -66,10 +67,21 @@ export const UpdateGround = () => {
   }, [data]);
 
   const onSubmit = (values: FormValues) => {
-    mutate({
-      id,
-      ...values,
-    });
+    mutate(
+      {
+        id,
+        ...values,
+      },
+      {
+        onSuccess(data) {
+          console.log(data);
+          navigate("/app/ground");
+        },
+        onError(error) {
+          console.log(error);
+        },
+      }
+    );
   };
 
   if (isPending)
