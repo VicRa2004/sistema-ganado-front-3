@@ -1,8 +1,20 @@
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { ScrollArea } from "@/ui/components/ui/scroll-area";
 import { Navigation } from "../components/navigation";
+import { useEffect } from "react";
 
 export const Layout = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const handler = () => {
+      // redirige a login
+      navigate("/login?expired=true");
+    };
+
+    window.addEventListener("auth-expired", handler);
+    return () => window.removeEventListener("auth-expired", handler);
+  }, [navigate]);
+
   return (
     // 1. h-screen: Fuerza al contenedor a medir exactamente el alto de la ventana
     // 2. flex-col: Organiza hijos en columna
