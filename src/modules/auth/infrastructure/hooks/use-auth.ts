@@ -12,7 +12,9 @@ export const useLogin = () => {
 };
 
 export const useLogout = () => {
-  service.logout();
+  return {
+    logout: () => service.logout(),
+  };
 };
 
 export const useRegister = () => {

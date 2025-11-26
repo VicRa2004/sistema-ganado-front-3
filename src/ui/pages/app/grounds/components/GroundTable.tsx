@@ -13,9 +13,10 @@ import { Ground } from "@/modules/ground/domain/Ground";
 
 interface GroundTableProps {
   grounds: Ground[];
+  onDelete: (id: number) => void;
 }
 
-export const GroundTable = ({ grounds }: GroundTableProps) => {
+export const GroundTable = ({ grounds, onDelete }: GroundTableProps) => {
   return (
     <div className="rounded-lg border">
       <Table>
@@ -65,6 +66,7 @@ export const GroundTable = ({ grounds }: GroundTableProps) => {
                   size="sm"
                   variant="destructive"
                   className="inline-flex items-center gap-1"
+                  onClick={() => onDelete(ground.id)}
                 >
                   <Trash className="h-4 w-4" />
                   Eliminar

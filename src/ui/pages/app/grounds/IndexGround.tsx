@@ -3,6 +3,16 @@ import { useGetGrounds } from "@/modules/ground/infrastructure/hooks/use-ground"
 
 import { Toggle } from "@/ui/components/ui/toggle";
 import { Button } from "@/ui/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/ui/components/ui/alert-dialog"; // Importamos el AlertDialog
 import { LayoutGrid, Table as TableIcon, Plus } from "lucide-react";
 import { Link } from "react-router";
 
@@ -11,6 +21,8 @@ import { GroundTable } from "./components/GroundTable";
 
 export const IndexGround = () => {
   const [view, setView] = useState<"card" | "table">("card");
+  // Estado para guardar el ID del elemento a eliminar. Si es null, el modal está cerrado.
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { data, isPending, error } = useGetGrounds({
     page: 1,
@@ -18,6 +30,17 @@ export const IndexGround = () => {
   });
 
   const items = data?.items ?? [];
+
+  // Función para confirmar la eliminación
+  const handleDeleteConfirm = () => {
+    if (!deleteId) return;
+
+    // AQUÍ EJECUTAS TU LÓGICA DE ELIMINACIÓN (ej: hook de delete)
+    console.log("Eliminando elemento con ID:", deleteId);
+
+    // Cerramos el modal
+    setDeleteId(null);
+  };
 
   return (
     <div className="p-4 space-y-4">
@@ -64,13 +87,49 @@ export const IndexGround = () => {
       {view === "card" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((ground) => (
-            <GroundCard key={ground.id} ground={ground} />
+            <GroundCard
+              key={ground.id}
+              ground={ground}
+              // Pasamos la función para abrir el modal
+              onDelete={() => setDeleteId(ground.id)}
+            />
           ))}
         </div>
       )}
 
       {/* table view */}
-      {view === "table" && <GroundTable grounds={items} />}
+      {view === "table" && (
+        <GroundTable
+          grounds={items}
+          // Pasamos la función para abrir el modal
+          onDelete={(id) => setDeleteId(id)}
+        />
+      )}
+
+      {/* MODAL DE ELIMINACIÓN (AlertDialog) */}
+      <AlertDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás absolutamente seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Esto eliminará permanentemente
+              el terreno de la base de datos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
