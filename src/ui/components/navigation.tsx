@@ -57,8 +57,8 @@ export const Navigation = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center px-6">
+    <header className="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter:bg-green-500/80]">
+      <div className="w-full flex h-16 items-center px-6 max-w-screen-2xl mx-auto">
         {/* LOGO E IDENTIDAD */}
         <div className="mr-8 flex items-center gap-2">
           <Link
@@ -75,7 +75,7 @@ export const Navigation = () => {
         </div>
 
         {/* NAVEGACIÓN PRINCIPAL */}
-        <div className="flex-1 flex items-center">
+        <div className="flex-1 flex items-center gap-8">
           {user && (
             <NavigationMenu>
               <NavigationMenuList>
@@ -95,7 +95,7 @@ export const Navigation = () => {
                       <li className="row-span-3">
                         <NavigationMenuLink asChild>
                           <Link
-                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-muted/80 transition-colors"
+                            className="flex h-full w-full select-none flex-col justify-end rounded-md bg-linear-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-muted/80 transition-colors"
                             to="/app/cattle"
                           >
                             <div className="bg-primary/10 w-fit p-2 rounded-md mb-2">
@@ -142,7 +142,7 @@ export const Navigation = () => {
         </div>
 
         {/* ZONA DERECHA */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-auto pl-8">
           <ModeToggle />
 
           {!user ? (
@@ -166,7 +166,7 @@ export const Navigation = () => {
                     {/* Intentamos cargar la imagen */}
 
                     {/* Fallback Estilizado */}
-                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-bold text-xs">
+                    <AvatarFallback className="bg-linear-to-b from-primary/20 to-primary/5 text-primary font-bold text-xs">
                       {user.fullName ? (
                         getInitials(user.fullName)
                       ) : (

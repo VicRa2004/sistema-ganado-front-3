@@ -19,7 +19,7 @@ export const Layout = () => {
     // 1. h-screen: Fuerza al contenedor a medir exactamente el alto de la ventana
     // 2. flex-col: Organiza hijos en columna
     // 3. overflow-hidden: Evita que aparezca el scroll nativo del navegador
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-screen w-full flex-col overflow-hidd">
       {/* La navegación ocupa su altura natural */}
       <Navigation />
 

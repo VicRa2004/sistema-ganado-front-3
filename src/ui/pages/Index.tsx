@@ -24,7 +24,7 @@ export const Index = () => {
 
   // Componente de Fondo (Patrón de puntos sutil)
   const BackgroundPattern = () => (
-    <div className="absolute inset-0 -z-10 h-full w-full bg-background [background:radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50 pointer-events-none" />
+    <div className="absolute inset-0 -z-10 h-full w-full bg-background [background:radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size[16_16px] opacity-50 pointer-events-none" />
   );
 
   // =============================
@@ -71,7 +71,7 @@ export const Index = () => {
           </Link>
 
           {/* Módulo: Fierros (Marcas) */}
-          <Link to="/app/brand" className="group">
+          <Link to="/app/iron" className="group">
             <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-muted hover:border-primary/50">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center mb-4 group-hover:bg-orange-200 transition-colors">
