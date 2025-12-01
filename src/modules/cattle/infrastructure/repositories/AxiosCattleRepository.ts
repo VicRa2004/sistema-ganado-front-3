@@ -16,9 +16,11 @@ export class AxiosCattleRepository implements CattleRepository {
   async find(filters: CattleFilters): Promise<Pagination<Cattle>> {
     const {
       data: { data },
-    } = await axiosClient.get<ResAPI<Pagination<Cattle>>>("/cattle", {
+    } = await axiosClient.get<ResAPI<Pagination<Cattle>>>("/cattle/query", {
       params: filters,
     });
+
+    console.log(data);
 
     // Mapeamos para convertir las fechas de string a objetos Date
     data.items = data.items.map((cattle) => ({

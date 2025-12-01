@@ -6,6 +6,9 @@ import { UpdateGround } from "./grounds/UpdateGround";
 import { IndexIron } from "./irons/IndexIron";
 import { CreateIron } from "./irons/CreateIron";
 import { UpdateIron } from "./irons/UpdateIron";
+import { IndexCattle } from "./cattles/IndexCattle";
+import { CreateCattle } from "./cattles/CreateCattle";
+import { UpdateCattle } from "./cattles/UpdateCattle";
 
 export const appRoutes: RouteObject = {
   path: "app",
@@ -37,6 +40,18 @@ export const appRoutes: RouteObject = {
     {
       path: "iron/update/:id",
       Component: UpdateIron,
+    },
+    {
+      path: "cattle",
+      Component: IndexCattle,
+    },
+    {
+      path: "cattle/create",
+      Component: CreateCattle,
+    },
+    {
+      path: "cattle/update/:id",
+      Component: UpdateCattle,
     },
   ],
 };
