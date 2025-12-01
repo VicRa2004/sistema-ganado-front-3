@@ -2,18 +2,22 @@ import { Outlet, useNavigate } from "react-router";
 import { ScrollArea } from "@/ui/components/ui/scroll-area";
 import { Navigation } from "../components/navigation";
 import { useEffect } from "react";
+import { useAuthStore } from "@/modules/auth/infrastructure/auth.store";
 
 export const Layout = () => {
+  const clear = useAuthStore((state) => state.clear);
+
   const navigate = useNavigate();
   useEffect(() => {
     const handler = () => {
+      clear();
       // redirige a login
       navigate("/login?expired=true");
     };
 
     window.addEventListener("auth-expired", handler);
     return () => window.removeEventListener("auth-expired", handler);
-  }, [navigate]);
+  }, [navigate, clear]);
 
   return (
     // 1. h-screen: Fuerza al contenedor a medir exactamente el alto de la ventana
