@@ -1,17 +1,17 @@
 import { Outlet, useNavigate } from "react-router";
-import { ScrollArea } from "@/ui/components/ui/scroll-area";
+// 1. IMPORTANTE: Importar ScrollBar aquí
+import { ScrollArea, ScrollBar } from "@/ui/components/ui/scroll-area";
 import { Navigation } from "../components/navigation";
 import { useEffect } from "react";
 import { useAuthStore } from "@/modules/auth/infrastructure/auth.store";
 
 export const Layout = () => {
   const clear = useAuthStore((state) => state.clear);
-
   const navigate = useNavigate();
+
   useEffect(() => {
     const handler = () => {
       clear();
-      // redirige a login
       navigate("/login?expired=true");
     };
 
@@ -20,22 +20,23 @@ export const Layout = () => {
   }, [navigate, clear]);
 
   return (
-    // 1. h-screen: Fuerza al contenedor a medir exactamente el alto de la ventana
-    // 2. flex-col: Organiza hijos en columna
-    // 3. overflow-hidden: Evita que aparezca el scroll nativo del navegador
-    <div className="flex h-screen w-full flex-col overflow-hidd">
-      {/* La navegación ocupa su altura natural */}
+    // 2. CORRECCIÓN: 'overflow-hidd' -> 'overflow-hidden'
+    <div className="flex h-screen w-full flex-col overflow-hidden">
       <Navigation />
 
-      {/* flex-1: Hace que main ocupe todo el espacio restante disponible
-         overflow-hidden: Asegura que el contenedor no se estire si el hijo es grande 
-      */}
       <main className="flex-1 overflow-hidden">
-        {/* h-full: Obliga al ScrollArea a ocupar todo el alto de main
-           w-full: Ocupa todo el ancho
+        {/* Nota: Moví el p-4 a un div interno. 
+            Es buena práctica en shadcn para que el ScrollBar no se monte sobre el padding.
         */}
-        <ScrollArea className="h-full w-full p-4">
-          <Outlet />
+        <ScrollArea className="h-full w-full">
+          <div className="p-4 h-full">
+            {" "}
+            {/* Contenedor interno para el padding */}
+            <Outlet />
+          </div>
+
+          {/* 3. SOLUCIÓN: Agregar explícitamente la barra horizontal */}
+          <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </main>
     </div>
