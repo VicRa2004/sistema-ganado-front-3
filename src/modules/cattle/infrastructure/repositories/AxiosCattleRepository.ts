@@ -37,7 +37,7 @@ export class AxiosCattleRepository implements CattleRepository {
     try {
       const {
         data: { data },
-      } = await axiosClient.get<ResAPI<Cattle>>(`/cattle/${id}`);
+      } = await axiosClient.get<ResAPI<Cattle>>(`/cattle/query/${id}`);
 
       return {
         ...data,
