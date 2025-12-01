@@ -1,23 +1,30 @@
 import { Race, RaceCreate, RaceUpdate } from "../../domain/Race";
 import { RaceRepository } from "../../domain/RaceRepository";
 import { axiosClient } from "@/core/config/axiosClient";
+import { Pagination } from "@/core/shared/domain/Pagination";
 import { ResAPI } from "@/core/shared/domain/ResAPI";
 import { AxiosError } from "axios";
 
 export class AxiosRaceRepository implements RaceRepository {
-  async find(): Promise<Race[]> {
+  async find(): Promise<Pagination<Race>> {
     const {
       data: { data },
-    } = await axiosClient.get<ResAPI<Race[]>>("/race");
+    } = await axiosClient.get<ResAPI<Pagination<Race>>>("/race");
+
+    console.log({
+      data,
+      message: "las rasas",
+    });
 
     // Mapeamos el array para convertir las fechas de cada elemento
-    return data.map((race) => ({
-      ...race,
-      // Asumiendo que la carrera tiene una fecha de evento específica además de created/updated
-      // date: new Date(race.date),
-      createdAt: new Date(race.createdAt),
-      updatedAt: new Date(race.updatedAt),
-    }));
+    return {
+      ...data,
+      items: data.items.map((race) => ({
+        ...race,
+        createdAt: new Date(race.createdAt),
+        updatedAt: new Date(race.updatedAt),
+      })),
+    };
   }
 
   async findById(id: number): Promise<Race | null> {

@@ -3,8 +3,12 @@ import { RaceRepository } from "../domain/RaceRepository";
 
 export const createRaceService = (repository: RaceRepository) => {
   return {
-    getAll() {
-      return repository.find();
+    async getAll() {
+      const data = await repository.find();
+
+      console.log({ data });
+
+      return data;
     },
     getOne(id: number) {
       return repository.findById(id);

@@ -1,7 +1,8 @@
+import { Pagination } from "@/core/shared/domain/Pagination";
 import { Race, RaceCreate, RaceUpdate } from "./Race";
 
 export interface RaceRepository {
-  find(): Promise<Race[]>;
+  find(): Promise<Pagination<Race>>;
   findById(id: number): Promise<Race | null>;
 
   create(race: RaceCreate): Promise<Race>;

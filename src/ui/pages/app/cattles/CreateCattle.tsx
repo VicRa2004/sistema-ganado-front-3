@@ -11,6 +11,7 @@ import {
 } from "@/modules/cattle/infrastructure/hooks/use-cattle";
 import { useGetIrons } from "@/modules/iron/infrastructure/hooks/use-iron";
 import { useGetGrounds } from "@/modules/ground/infrastructure/hooks/use-ground";
+import { useGetRaces } from "@/modules/race/infrastructure/hooks/use-race"; // <--- NUEVO IMPORT
 
 // UI Components
 import { Input } from "@/ui/components/ui/input";
@@ -24,11 +25,11 @@ import {
   CardContent,
 } from "@/ui/components/ui/card";
 
-// Custom Components (Los que acabamos de crear)
+// Custom Components
 import { SelectionInput } from "@/ui/components/custom/SelectionInput";
 import { DataSelectorModal } from "@/ui/components/custom/DataSelectorModal";
 
-// --- SCHEMA (Fuera del componente para limpieza) ---
+// --- SCHEMA ---
 const schema = z.object({
   description: z.string().min(2, "Requerido"),
   registrationNumber: z.string().min(1, "Requerido"),
@@ -36,7 +37,7 @@ const schema = z.object({
   gender: z.enum(["male", "female"]),
   color: z.string().min(2, "Requerido"),
   birthdate: z.string().refine((d) => !isNaN(Date.parse(d)), "Fecha inválida"),
-  idRace: z.number().min(1, "Requerido"),
+  idRace: z.number().min(1, "Requerido"), // Se mantiene igual en el schema
   observations: z.string(),
   idGround: z.number().optional(),
   idIron: z.number().optional(),
@@ -51,15 +52,18 @@ export const CreateCattle = () => {
   const navigate = useNavigate();
   const { mutate, isPending, error: createError } = useCreateCattle();
 
-  // Estado unificado para modales y nombres visuales
+  // Estado unificado para modales (Agregado 'race')
   const [activeModal, setActiveModal] = useState<
-    "ground" | "iron" | "father" | "mother" | null
+    "ground" | "iron" | "father" | "mother" | "race" | null
   >(null);
+
+  // Nombres visuales (Agregado 'race')
   const [displayNames, setDisplayNames] = useState({
     ground: "",
     iron: "",
     father: "",
     mother: "",
+    race: "",
   });
 
   const form = useForm<FormValues>({
@@ -88,11 +92,12 @@ export const CreateCattle = () => {
       iron: "idIron",
       father: "idFather",
       mother: "idMother",
+      race: "idRace", // <--- Mapeo nuevo
     };
 
-    form.setValue(formFieldMap[key], id);
+    form.setValue(formFieldMap[key], id, { shouldValidate: true });
     setDisplayNames((prev) => ({ ...prev, [key]: name }));
-    setActiveModal(null); // Cierra el modal
+    setActiveModal(null);
   };
 
   const clearSelection = (key: keyof typeof displayNames) => {
@@ -101,8 +106,11 @@ export const CreateCattle = () => {
       iron: "idIron",
       father: "idFather",
       mother: "idMother",
+      race: "idRace", // <--- Mapeo nuevo
     };
-    form.setValue(formFieldMap[key], undefined);
+    // Para campos numéricos requeridos como idRace, undefined puede causar error de validación,
+    // pero permite limpiar la UI. El usuario deberá seleccionar otro.
+    form.setValue(formFieldMap[key], key === "race" ? 0 : undefined);
     setDisplayNames((prev) => ({ ...prev, [key]: "" }));
   };
 
@@ -116,7 +124,7 @@ export const CreateCattle = () => {
         image: values.image?.[0] ?? undefined,
       },
       {
-        onSuccess: () => navigate("/cattle"),
+        onSuccess: () => navigate("/app/cattle"),
       }
     );
   };
@@ -166,12 +174,21 @@ export const CreateCattle = () => {
                 </select>
               </div>
 
+              {/* --- CAMBIO AQUÍ: Input manual reemplazado por SelectionInput --- */}
               <div className="space-y-1">
-                <Label>Raza (ID)</Label>
-                <Input
-                  type="number"
-                  {...form.register("idRace", { valueAsNumber: true })}
+                {/* SelectionInput maneja su propio label internamente si se lo pasas, 
+                     o puedes usarlo como wrapper. Aquí uso tu patrón anterior */}
+                <SelectionInput
+                  label="Raza"
+                  value={displayNames.race}
+                  onOpen={() => setActiveModal("race")}
+                  onClear={() => clearSelection("race")}
                 />
+                <p className="text-xs text-red-500">
+                  {form.formState.errors.idRace?.message}
+                </p>
+                {/* Input oculto para registrar el campo en hook-form si fuera necesario, 
+                    aunque setValue ya lo maneja. Dejo esto comentado por limpieza. */}
               </div>
 
               <div className="space-y-1">
@@ -185,7 +202,7 @@ export const CreateCattle = () => {
               </div>
             </div>
 
-            {/* --- BLOQUE 2: RELACIONES (Usando componentes custom) --- */}
+            {/* --- BLOQUE 2: RELACIONES --- */}
             <div className="p-4 bg-muted/20 rounded-lg border border-dashed space-y-4">
               <h4 className="text-sm font-semibold text-muted-foreground">
                 Ubicación y Genealogía
@@ -247,6 +264,16 @@ export const CreateCattle = () => {
 
       {/* --- MODALES RENDERIZADOS CONDICIONALMENTE --- */}
 
+      {/* MODAL NUEVO PARA RAZA */}
+      <DataSelectorModal
+        title="Seleccionar Raza"
+        isOpen={activeModal === "race"}
+        onClose={() => setActiveModal(null)}
+        useDataHook={useGetRaces}
+        displayKey="name"
+        onSelect={(item) => handleSelection("race", item.id, item.name)}
+      />
+
       <DataSelectorModal
         title="Seleccionar Terreno"
         isOpen={activeModal === "ground"}
@@ -270,7 +297,7 @@ export const CreateCattle = () => {
         isOpen={activeModal === "father"}
         onClose={() => setActiveModal(null)}
         useDataHook={useGetCattles}
-        hookParams={{ gender: "male" }} // Filtro automático
+        hookParams={{ gender: "male" }}
         displayKey="description"
         extraKey="registrationNumber"
         onSelect={(item) =>
@@ -283,7 +310,7 @@ export const CreateCattle = () => {
         isOpen={activeModal === "mother"}
         onClose={() => setActiveModal(null)}
         useDataHook={useGetCattles}
-        hookParams={{ gender: "female" }} // Filtro automático
+        hookParams={{ gender: "female" }}
         displayKey="description"
         extraKey="registrationNumber"
         onSelect={(item) =>
