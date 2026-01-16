@@ -9,9 +9,11 @@ import { UpdateIron } from "./irons/UpdateIron";
 import { IndexCattle } from "./cattles/IndexCattle";
 import { CreateCattle } from "./cattles/CreateCattle";
 import { UpdateCattle } from "./cattles/UpdateCattle";
+import { ProtectedRoute } from "@/ui/components/protected-route";
 
 export const appRoutes: RouteObject = {
   path: "app",
+  Component: ProtectedRoute,
   children: [
     {
       index: true,

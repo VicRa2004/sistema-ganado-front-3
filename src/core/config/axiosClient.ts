@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useAuthStore } from "../../modules/auth/infrastructure/auth.store";
+import { container } from "../container";
 
 export const axiosClient = axios.create({
   baseURL: "http://localhost:3000",
@@ -23,8 +24,7 @@ axiosClient.interceptors.response.use(
 
   (error) => {
     if (error.response?.status === 401) {
-      //AuthService.logout();
-      // aqui quitamos el token
+      container.auth.logout();
     }
     return Promise.reject(error);
   }
